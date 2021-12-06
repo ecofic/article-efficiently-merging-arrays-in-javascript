@@ -1,0 +1,14 @@
+{
+  "name": "article-efficiently-merging-arrays-via-javascript",
+  "version": "1.0.0",
+  "description": "Code supporting the article on merging Arrays in JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "dev": "lite-server --baseDir='src'"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
