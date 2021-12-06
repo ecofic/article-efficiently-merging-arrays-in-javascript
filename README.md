@@ -43,4 +43,5 @@ These repositories sped up the development of this sample code.
 | [Bootstrap](https://getbootstrap.com/) | [view](https://github.com/twbs/bootstrap)       | [MIT](https://github.com/twbs/bootstrap/blob/main/LICENSE)       |
 | lite-server                            | [view](https://github.com/johnpapa/lite-server) | [MIT](https://github.com/johnpapa/lite-server/blob/main/LICENSE) |
 
+If this repository helped _you_, I hope you'll provide attribution in some way. 
 Thank you. 👍
