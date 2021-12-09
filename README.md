@@ -1,6 +1,6 @@
-# Efficiently Merging Arrays in JavaScript
-This repository is associated with the Efficiently Merging Arrays in JavaScript article.
-This project serves as a basic performance benchmark suite.
+# Article
+This repository is associated with the [Efficiently Merging Arrays in JavaScript](#) article.
+This repository includes the samples and basic performance benchmark tool.
 
 ## Getting Started
 To get started:
