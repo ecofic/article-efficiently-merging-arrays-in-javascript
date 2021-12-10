@@ -53,9 +53,9 @@ onmessage = (e) => {
         if (shouldRun) {
             try {
                 const startTime = performance.now();
-                let result = array1.concat(array2); 
+                let result = array1.concat(array2);
                 iteration.concatRuntime = performance.now() - startTime;
-                result = null;    
+                result = null;
             } catch (err) {
                 iteration.concatRuntime = 'N/A';
             }
@@ -76,11 +76,11 @@ onmessage = (e) => {
 
                 const startTime = performance.now();
                 for (let i=0; i<array2.length; i++) {
-                    result.push(array2[i]);                    
+                    result.push(array2[i]);
                 }
                 iteration.pushRuntime = performance.now() - startTime;
 
-                result = null;    
+                result = null;
             } catch (err) {
                 iteration.pushRuntime = 'N/A';
             }
