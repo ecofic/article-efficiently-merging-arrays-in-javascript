@@ -109,6 +109,15 @@
                             </label>
                         </div>                            
                     </li>
+
+                    <li class="list-inline-item">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="useSpreadC2heckbox" v-model="useSpread2">
+                          <label class="form-check-label" for="useSpread2Checkbox">
+                              Use spread 2 approach
+                          </label>
+                      </div>                            
+                  </li>
                 </ul>
 
                 <button class="btn btn-primary" style="white-space: nowrap;" @click="runTests">Run Tests</button>
@@ -136,6 +145,7 @@
                               <th v-if="useConcat">Concat Runtime</th>
                               <th v-if="usePush">Push Runtime</th>
                               <th v-if="useSpread">Spread Runtime</th>
+                              <th v-if="useSpread2">Spread 2 Runtime</th>
                             </tr>
                           </thead>
 
@@ -145,6 +155,7 @@
                               <td v-if="useConcat" :class="getPerformanceClasses(iteration, testRun.iterations, 'concatRuntime')">{{ formatRuntime(iteration.concatRuntime) }}</td>
                               <td v-if="usePush" :class="getPerformanceClasses(iteration, testRun.iterations, 'pushRuntime')">{{ formatRuntime(iteration.pushRuntime) }}</td>
                               <td v-if="useSpread" :class="getPerformanceClasses(iteration, testRun.iterations, 'spreadRuntime')">{{ formatRuntime(iteration.spreadRuntime) }}</td>
+                              <td v-if="useSpread2" :class="getPerformanceClasses(iteration, testRun.iterations, 'spread2Runtime')">{{ formatRuntime(iteration.spread2Runtime) }}</td>
                             </tr>
                           </tbody>
 
@@ -154,6 +165,7 @@
                               <td v-if="useConcat" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgConcatRuntime">{{ testRun.avgConcatRuntimeFixed }} ms.</td>
                               <td v-if="usePush" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgPushRuntime">{{ testRun.avgPushRuntimeFixed }} ms.</td>
                               <td v-if="useSpread" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgSpreadRuntime">{{ testRun.avgSpreadRuntimeFixed }} ms.</td>
+                              <td v-if="useSpread2" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="testRun.avgSpread2Runtime">{{ testRun.avgSpread2RuntimeFixed }} ms.</td>
                             </tr>
                           </tfoot>
                         </table>
@@ -211,6 +223,7 @@
                     useConcat: true,
                     usePush: true,
                     useSpread: true,
+                    useSpread2: true,
 
                     array1ElementType: 'values',
                     array1ElementCount: 1000,
@@ -272,7 +285,7 @@
                     this.iterationNumber = this.iterationNumber + 1;
                     this.currentIteration = { number: this.iterationNumber };
 
-                    const message = { command:'run-iteration', number: this.iterationNumber, useConcat:this.useConcat, usePush:this.usePush, useSpread:this.useSpread };
+                    const message = { command:'run-iteration', number: this.iterationNumber, useConcat:this.useConcat, usePush:this.usePush, useSpread:this.useSpread, useSpread2:this.useSpread2 };
                     worker.postMessage(message);
                 },
 
@@ -309,6 +322,17 @@
                         this.currentRun.avgSpreadRuntime = mean;
                         this.currentRun.avgSpreadRuntimeFixed = parseFloat(mean.toFixed(5));
                       }
+                    }
+
+                    if (this.useSpread2) {
+                      const mean = iterations.reduce((total, r) => total + r.spread2Runtime, 0) / iterations.length;
+                      if (isNaN(mean)) {
+                        this.currentRun.avgSpread2Runtime = 'Could not be determined.';
+                        this.currentRun.avgSpread2RuntimeFixed = 'N/A';
+                      } else {
+                        this.currentRun.avgSpread2Runtime = mean;
+                        this.currentRun.avgSpread2RuntimeFixed = parseFloat(mean.toFixed(5));                      }
+
                     }
                   }
                 },
@@ -347,6 +371,10 @@
                         if (r.spreadRuntime > 0) {            // This is a guard to ensure a value of "0" is not highlighted.
                             allRuntimes.push(r.spreadRuntime);
                         }
+
+                        if (r.spread2Runtime > 0) {           // This is a guard to ensure a value of "0" is not highlighted.
+                          allRuntimes.push(r.spread2Runtime);
+                        }
                     });
 
                     const fastestOverall = Math.min(...allRuntimes);
@@ -362,6 +390,9 @@
                     }
                     if (iteration.spreadRuntime > 0) {
                         iterationRuntimes.push(iteration.spreadRuntime);
+                    }
+                    if (iteration.spread2Runtime > 0) {
+                      iterationRuntimes.push(iteration.spread2Runtime);
                     }
 
                     const fastestInIteration = Math.min(...iterationRuntimes);

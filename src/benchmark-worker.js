@@ -11,6 +11,7 @@ onmessage = (e) => {
     let concatCompleted = false;
     let pushCompleted = false;
     let spreadCompleted = false;
+    let spread2Completed = false;
 
     /**
      * Initializes an array.
@@ -43,6 +44,7 @@ onmessage = (e) => {
         executeConcat(options.useConcat);
         executePush(options.usePush);
         executeSpread(options.useSpread);
+        executeSpread2(options.useSpread2);
     }
 
     /**
@@ -55,6 +57,10 @@ onmessage = (e) => {
                 const startTime = performance.now();
                 let result = array1.concat(array2);
                 iteration.concatRuntime = performance.now() - startTime;
+
+                console.log('concat:');
+                console.log(result);
+
                 result = null;
             } catch (err) {
                 iteration.concatRuntime = 'N/A';
@@ -80,6 +86,9 @@ onmessage = (e) => {
                 }
                 iteration.pushRuntime = performance.now() - startTime;
 
+                console.log('push:');
+                console.log(result);
+
                 result = null;
             } catch (err) {
                 iteration.pushRuntime = 'N/A';
@@ -103,6 +112,8 @@ onmessage = (e) => {
                 result.push(...array2);
                 iteration.spreadRuntime = performance.now() - startTime;
 
+                console.log('spread:');
+                console.log(result);
                 result = null;
             } catch (err) {
                 iteration.spreadRuntime = 'N/A';
@@ -113,11 +124,31 @@ onmessage = (e) => {
         assertCompleteIteration();
     }
 
+    function executeSpread2(shouldRun) {
+        spread2Completed = false;
+        if (shouldRun) {
+            try {
+                const startTime = performance.now();
+                const result = [...array2, ...array1];
+
+                console.log('spread 2:');
+                console.log(result);
+
+                iteration.spread2Runtime = performance.now() - startTime;
+            } catch (err) {
+                iteration.spreadRuntime = 'N/A';
+            }
+        }
+        spread2Completed = true;
+
+        assertCompleteIteration();
+    }
+
     /**
      * Tests to see if the current iteration has completed.
      */
     function assertCompleteIteration() {
-        const isComplete = concatCompleted && pushCompleted && spreadCompleted;
+        const isComplete = concatCompleted && pushCompleted && spreadCompleted && spread2Completed;
         if (isComplete) {
             const response = { command:'test-iteration-completed', iteration:iteration };
             postMessage(response);
